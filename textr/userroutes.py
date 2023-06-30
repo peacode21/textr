@@ -304,7 +304,7 @@ def form():
 @app.route('/state/<country>')
 def loadstate(country):
     state = db.session.query(State).filter(State.state_countryid==country).all()
-    data = '<select name="state" class="form-select form-select-md mb-1 border-info">'
+    data = '<select name="state" class="form-select form-select-md mb-1 border-dark">'
     for s in state:
         data =data+"<option>"+ s.state +"</option>"
     data = data+ "</select>"
@@ -328,12 +328,12 @@ def register():
         pwd = request.form.get('pwd')
         cpwd = request.form.get('cpwd')
         hashed_pwd=generate_password_hash(pwd)
-        if pwd != cpwd:
-            flash('Password and Confirm Password not match')
-            return redirect('form')
-        elif fname == '' or lname == '' or uname == '' or email == '' or phone == '' or pwd == '':
+        if fname == '' or lname == '' or uname == '' or email == '' or phone == '' or pwd == '':
             flash('One or more fields are empty, please complete the form')
-            return redirect('form')
+            return redirect(url_for('form'))
+        elif pwd != cpwd:
+            flash('Password and Confirm Password not match')
+            return redirect(url_for('form'))
         else:
             users=db.session.query(User).filter(User.user_username==uname).first()
             emails=db.session.query(User).filter(User.user_email==email).first()
@@ -343,10 +343,10 @@ def register():
                 flash("Username Already Exists")
                 return redirect(url_for('form'))
             elif emails != None:
-                flash("Email Address Already Exists, Try logging in")
+                flash("Email Address Already Exists, Try logging in or use a different email to try again")
                 return redirect(url_for('form'))
             elif phones != None:
-                flash("Phone Number Already Exists, Try logging in")
+                flash("Phone Number Already Exists, Try logging in or use a different phone number to try again")
                 return redirect(url_for('form'))
             else:
                 if mname == '':

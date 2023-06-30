@@ -12,14 +12,21 @@ label{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .center{
-    border:2px solid rgba(25, 25, 245, 0.705);
+    border:2px solid rgba(0, 0, 0, 0.705);
     border-radius: 8%;
+    background-color: rgb(244, 244, 244);
 }
 .link{
     text-decoration: cornsilk;
 }
+.form_margin{
+    margin-left: 8%;
+}
 .form_nav{
     font-size: large;
+}
+.img_margin{
+    margin-left: 30%;
 }
 .space{
     justify-content: space-between;
@@ -35,15 +42,13 @@ label{
 
         </div>
    
-        <div class="center col-8 mt-1">
-            <div class="p-5">
+        <div class="center col-sm-12 col-md-8 mt-1">
+            <div class="p-2">
                 <div class="row">
-                    <div class="col-4"></div>
-                    <div class="col-4">
+                    <div class="col-4 img_margin">
                         <img src="{{ url_for('static',filename='images/banner1.png')}}" width="100%">
 
                     </div>
-                    <div class="col-4"></div>
                 </div>
             
             {% with m=get_flashed_messages() %}
@@ -54,14 +59,16 @@ label{
             {% endif %}
             {% endwith %}
                 <hr>
-            <h2>Register</h2>
-        <form method="post" action="{{ url_for('register')}}">
+            <h2 class="form_margin">Register</h2>
+        <form method="post" action="{{ url_for('register')}}" class="form_margin">
+            <div class="row">
+                <div class="col-md-6">
             <div class="row mt-2">
                 <div class="col">
                     <label>First Name: </label>
                 </div>
                 <div class="col-10">
-                    <input type="text" class="form-control border-info" name="fname" placeholder="Input first name">
+                    <input type="text" class="form-control border-dark" name="fname" placeholder="Input first name">
                     
                 </div>
             </div>
@@ -70,7 +77,7 @@ label{
                     <label>Middle Name: </label>
                 </div>
                 <div class="col-10">
-                    <input type="text" class="form-control border-info" name="mname" placeholder="Input middle name (Optional)">
+                    <input type="text" class="form-control border-dark" name="mname" placeholder="Input middle name (Optional)">
                     
                 </div>
             </div>
@@ -79,7 +86,7 @@ label{
                     <label>Last Name: </label>
                 </div>
                 <div class="col-10">
-                    <input type="text" class="form-control border-info" name="lname" placeholder="Input last name">
+                    <input type="text" class="form-control border-dark" name="lname" placeholder="Input last name">
                     
                 </div>
             </div>
@@ -88,27 +95,7 @@ label{
                     <label>Username: </label>
                 </div>
                 <div class="col-10">
-                    <input type="text" class="form-control border-info" name="uname" placeholder="Input Username">
-                    
-                </div>
-            </div>
-            <div class="row mt-2">
-                <div class="col">
-                    <label>Email: </label>
-                </div>
-                <div class="col-10">
-                    <span id="emails"></span>
-                    <input type="email" class="form-control border-info" name="email" placeholder="Input Email address">
-                    
-                    
-                </div>
-            </div>
-            <div class="row mt-2">
-                <div class="col">
-                    <label>Phone Number: </label>
-                </div>
-                <div class="col-10">
-                    <input type="text" class="form-control border-info" name="phone" placeholder="Input Phone number">
+                    <input type="text" class="form-control border-dark" name="uname" placeholder="Input Username">
                     
                 </div>
             </div>
@@ -118,28 +105,69 @@ label{
                 </div>
                 <div class="col-10">
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-md-3">
                             <input type="radio" name="gender" value="male" checked><span> Male</span>
                         </div>
-                        <div class="col-3">
+                        <div class="col-md-4">
                             <input type="radio" name="gender" value="female"><span> Female</span>
                         </div>
-                        <div class="col-4">
+                        <div class="col">
                             <input type="radio" name="gender" value="others"><span> Prefer not to say</span>
                         </div>
                     </div>
                     
                 </div>
             </div>
-            
-            <div class="row mt-2">
+                </div>
                 <div class="col-md-6">
+            <div class="row mt-2">
+                <div class="col-12">
+                    <label>Email: </label>
+                </div>
+                <div class="col-10">
+                    <span id="emails"></span>
+                    <input type="email" class="form-control border-dark" name="email" placeholder="Input Email address">
+                    
+                    
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12">
+                    <label>Phone Number: </label>
+                </div>
+                <div class="col-10">
+                    <input type="text" class="form-control border-dark" name="phone" placeholder="Input Phone number">
+                    
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12">
+                    <label>Password: </label>
+                </div>
+                <div class="col-10">
+                    <input type="password" class="form-control border-dark" id="pwd" name="pwd" placeholder="Input your password">
+                    
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12">
+                    <label>Confirm Password: </label>
+                </div>
+                <div class="col-10">
+                    <span id="cpwds"></span>
+                    <input type="password" class="form-control border-dark" id="cpwd" name="cpwd" placeholder="Confirm your password">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12">
+                    <div class="row">
+                <div class="col-md-5">
                     <div class="row space">
-                        <div class="col-2">
+                        <div class="col-12">
                     <label>Country: </label>
                         </div>
-                        <div class="col-8">
-                        <select name="country" class="form-select form-select-md mb-1 border-info" id="country">
+                        <div class="col">
+                        <select name="country" class="form-select form-select-md mb-1 border-dark" id="country">
                             <option selected value="">Choose Your Country...</option>
                             {% if country != [] %}
                             {% for c in country %}
@@ -150,43 +178,30 @@ label{
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="row space">
-                        <div class="col-2">
+                        <div class="col-12">
                             <label>State: </label>
                         </div>
-                        <div class="col-10">
+                        <div class="col">
                             <div id="state"></div>
                         </div>
                     </div>
                 </div>
-                </div>
-            <div class="row mt-2">
-                <div class="col-2">
-                    <label>Password: </label>
-                </div>
-                <div class="col-10">
-                    <input type="password" class="form-control border-info" id="pwd" name="pwd" placeholder="Input your password">
-                    
+                    </div>
                 </div>
             </div>
-            <div class="row mt-2">
-                <div class="col">
-                    <label>Confirm Password: </label>
-                </div>
-                <div class="col-10">
-                    <span id="cpwds"></span>
-                    <input type="password" class="form-control border-info" id="cpwd" name="cpwd" placeholder="Confirm your password">
                 </div>
             </div>
             
+            
             <div class="row mt-2">
-                <div class="col-2"></div>
-                <div class="col-10">
+                <div class="col-12 mb-2">
                     <input type="checkbox" id="check"><span> Check here to indicate that you have read and agree to the <a href="#" class="link">terms and conditions of this service</a></span>
-                    <br>
-                    <button id="btn" type="submit" class="btn btn-primary form-control mb-3" disabled>Register</button>
-                    <p class="form_nav">Already registered? Login <a href="{{ url_for('login_form')}}" class="link">here</a></p>
+                </div>
+                <div class="col-11">
+                    <button id="btn" type="submit" class="btn btn-dark form-control mb-3" disabled>Register</button>
+                    <span class="form_nav">Already registered? Login <a href="{{ url_for('login_form')}}" class="link">here</a></span>
                 </div>
             </div>
            
