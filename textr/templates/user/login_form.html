@@ -1,0 +1,91 @@
+{% extends 'user/index.html' %}
+
+{% block style %}
+
+
+<style type="text/css" rel="stylesheet">
+.optional{
+    color: rgba(128, 128, 128, 0.452);
+}
+label{
+    font-size: large;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.center{
+    border:2px solid rgba(0, 0, 0, 0.705);
+    border-radius: 8%;
+}
+.link{
+    text-decoration: cornsilk;
+}
+.form_nav{
+    font-size: large;
+}
+</style>
+{% endblock %}
+
+{% block form %}
+<div class="row p-5">
+        <div class="col-md-2">
+
+        </div>
+   
+        <div class="center col-8 mt-1">
+            <div class="p-5">
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col-4">
+                        <img src="{{ url_for('static',filename='images/banner2.png')}}" width="100%">
+
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+            {% with m=get_flashed_messages() %}
+            {% if m: %}
+            {% for msg in m%}
+            <p class="alert alert-danger">{{msg}}</p>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <hr>
+            
+            <h2>Login</h2>
+        <form method="post" action="{{ url_for('login')}}">
+            <div class="row mt-2">
+                <div class="col">
+                    <label>Email or Phone no: </label>
+                </div>
+                <div class="col-10">
+                    <input type="text" class="form-control border-dark" name="text" placeholder="Login using your Email address or Phone no">
+                    
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-2">
+                    <label>Password: </label>
+                </div>
+                <div class="col-10">
+                    <input type="password" class="form-control border-dark" name="pwd" placeholder="Input Correct Password">
+                    
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-2"></div>
+                <div class="col-10">
+                    <button type="submit" class="btn btn-dark form-control mb-3">Login</button>
+                    <p class="form_nav">New user? Register <a href="{{ url_for('form')}}" class="link">here</a></p>
+                </div>
+            </div>
+           
+        </form>
+
+    </div>
+    </div>
+
+    <div class="col-md-2">
+
+    </div>
+</div>
+
+{% endblock %}
+

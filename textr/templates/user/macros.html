@@ -1,0 +1,23 @@
+{% macro format_date(timestamp) %}
+  {% set now = datetime.utcnow() %}
+  {% set dt = datetime.fromtimestamp(timestamp) %}
+  {% if diff.days > 7 or diff.days < 0 %}
+    {{ timestamp.strftime('%d %b %y') }}
+  {% elif diff.days == 1 %}
+    1 day ago
+  {% elif diff.days > 1 %}
+    {{ diff.days }} days ago
+  {% elif diff.seconds <= 1 %}
+    just now
+  {% elif diff.seconds < 60 %}
+    {{ diff.seconds }} seconds ago
+  {% elif diff.seconds < 120 %}
+    1 minute ago
+  {% elif diff.seconds < 3600 %}
+    {{ diff.seconds // 60 }} minutes ago
+  {% elif diff.seconds < 7200 %}
+    1 hour ago
+  {% else %}
+    {{ diff.seconds // 3600 }} hours ago
+  {% endif %}
+{% endmacro %}

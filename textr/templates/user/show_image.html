@@ -1,0 +1,23 @@
+{% extends 'user/index.html' %}
+
+
+
+
+
+{% block content %}
+
+<div class="col-5 list_icons friendreq edit_icons navbar-nav-scroll">
+
+    <div class="row">
+        <div class="col-12 p-1 border_container m-1">
+            {% if profile_pic != None %}
+        <img src="{{ url_for('static',filename='uploads/'+profile_pic.profile_picture)}}" alt="Profile Picture" width="100%" class="borders">
+        {% endif %}
+
+</div>
+</div>
+
+</div>
+
+{% endblock %}
+

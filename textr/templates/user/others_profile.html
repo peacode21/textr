@@ -1,0 +1,582 @@
+{% extends 'user/index.html' %}
+
+ 
+{% block extstyle %}
+      
+<style type="text/css" rel="stylesheet">
+
+  
+.flex{
+        justify-content: left;
+    }
+.name{
+    font-size: xx-large;
+}
+.bio{
+    text-align: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: large;
+}
+.bg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+    z-index: 4;
+}
+
+.bg img {
+    position: relative;
+    z-index: 2;
+}
+
+.bgpic {
+    position: absolute;
+    left: 20%;
+    width: 75%;
+    height: 45%;
+    z-index: 8;
+    top: 45%;
+}
+.contain{
+    position: relative;
+}
+.media{
+    color:rgb(9, 220, 9)
+}
+.medias{
+    color:rgb(250, 36, 36)
+}
+.texts{
+    font-size: large;
+}
+.textarea{
+    border: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    color:ghostwhite;
+}
+.friends_display{
+      justify-content: left;
+      height: 100;
+    }
+    .picture_display{
+      align-content: start;
+      height: 100;
+    }
+    .friends_names{
+        font-size: small;
+    }
+</style>
+
+
+{% endblock %}
+
+
+{% block friendnav %}
+
+
+{% endblock %}
+
+{% block content %}
+<div class="row mt-3 contain">
+
+<div class="col-md-1"></div>
+<div class="col-md-9">
+    {% with m=get_flashed_messages()%}
+          {% if m:%}
+            {% for msg in m:%}
+              <p class="alert alert-success">{{msg}}</p>
+            {%endfor%}
+          {% endif %}
+          {% endwith %}
+<div class="row">
+
+    <div class="col-12 bg">
+        {% if cover != None %}
+        
+        <img src="{{ url_for('static',filename='cropped_cover/'+cover.cover_photo)}}" alt="Cover Photo" width="100%" height="200">
+
+        {% else %}
+
+        <img src="{{ url_for('static',filename='images/connect.png')}}" alt="Cover Photo" width="100%" height="200">
+        
+        {% endif %}
+    </div>
+<div class="col-12 bgpic">
+    <div class="row">
+        <div class="col-2">
+        {% if others_profile != None %}
+        
+        <img src="{{ url_for('static',filename='cropped_profile/'+others_profile.profile_picture)}}" alt="Profile Picture" width="100%" height="80%" class="picture mt-2 mb-3 col-10">
+
+        {% else %}
+        
+        <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="100%" height="80%" class="picture mt-2 mb-3">
+        
+        {% endif %}
+    </div>
+    <div class="col-10 name mt-5">
+        {% if user != [] %}
+        {{ user.user_fname }}  
+        {% if user.user_mname != None %}
+        {{ user.user_mname }} 
+        {% else %}
+        <span> </span>
+        {% endif %}
+        {{ user.user_lname }}
+    </div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-1"></div>
+
+</div>
+<div class="row mt-5">
+<hr>
+<div class="col-2"></div>
+    <div class="col">
+        <div class="row">
+            <div class="col-12 mb-2">
+                <div class="row">
+                    <div class="col-6">
+                        <a href="{{ url_for('friend_request_send',id=u.user_id) }}" class="btn btn-primary form-control add_friend">Add friend</a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{{ url_for('settings')}}" class="btn form-control button">Settings</a>
+                    </div>
+                </div>
+                
+            </div>
+            <hr>
+      <div class="col"><a href="{{ url_for('friends_friends',id=user.user_id)}}" class="link links">Friends</a></div>
+      <div class="col"><a href="#" class="link links mx-3">Groups</a></div>
+      <div class="col"><a href="{{ url_for('message')}}" class="link links mx-3">Messages</a></div>
+    </div>
+        </div>
+    <div class="col-2"></div>
+  </div>
+<div class="row">
+    
+    {% if post != None %}
+
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-4">
+
+    {% else %}
+    <div class="col-12">
+    {% endif %}
+        <div class="row profile_info_nav">
+            <div class="col borders">
+                <div class="row m-2">
+                    <div class="col background">
+                        <div class="row">
+                            <div class="col-12 mt-3">
+                                <h5>Intro</h5>
+                                <p class="bio">{{ user.user_bio }}</p>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <p><i class="fa-solid fa-heart"></i> Lives in {{ user.userstate.state }}, {{ user.userstate.statecountry.country }}</p>
+                                <p><i class="fa-solid fa-inbox"></i> {{ user.user_email }}</p>
+                                <p><i class="fa-solid fa-phone"></i> {{ user.user_phone }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <div class="col background mt-2">
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <p>Photos</p>
+                            </div>
+                            <div class="col edit_icon">
+                                <a href="{{ url_for('photo_column')}}" class="link">See All Photos</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                    {% if post_pic != [] %}
+                                <div class="row flex">
+                                        {% for p in post_pic %}
+                                        {% if p.post_media != None %}
+                                        
+                                        {% if '.mp4' in p.post_media %}
+                                        <span></span>
+                                        {% else %}
+                                    <div class="col-4 friends_display">
+                                        <div class="row">
+                                            <div class="col-12 mb-3">
+                                        <a href="{{ url_for('photo_column')}}" class="link"><img src="{{ url_for('static',filename='post_media/'+p.post_media)}}" alt="images" width="80%" height="80"></a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                        {% endif %}
+                                        {% endif %}
+                                        {% endfor %}
+                                </div>
+                                        {% else %}
+                                        <p class="text">No Photos available</p>
+                                        {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-1">
+                    <div class="col background mt-2">
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <p>Friends</p>
+                            </div>
+                            <div class="col edit_icon">
+                                <a href="{{ url_for('friends_friends',id=user.user_id)}}" class="link">See All Friends</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                {% if friends != []%}
+                    <div class="row flex">
+                        {% for f in friends %}
+                        <div class="col-4 friends_display">
+                            {% if f.friends_sourceid == user.user_id %}
+                            {% if f.friends_targetid == ids %}
+                            <a href="{{ url_for('profile') }}" class="link">
+                                {% else %}
+                    <a href="{{ url_for('user_profile',id=f.friends_targetid) }}" class="link">
+                                {% endif %}
+        <div class="row">
+            <div class="col p-1 border_container m-1">
+                {% if pic != None %}
+                    {% if pic[f.friends_targetid].profile_picture_userid==f.friends_targetid %}
+                        <img src="{{ url_for('static',filename='cropped_profile/'+pic[f.friends_targetid].profile_picture)}}" alt="Profile Picture" width="80%" height="100" class="borders">
+                    {% else %}
+                        <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="80%" height="100" class="borders">
+                    {% endif %}
+                {% endif %}
+                <div class="row">
+            <div class="col-12 name_container">
+                <span class="friends_names">{{ f.target_friends.user_fname }} {{ f.target_friends.user_lname }}</span>
+            </div>
+        </div>
+</div>
+    </div>
+    </a>
+                                            {% else %}
+                                            
+                            {% if f.friends_sourceid == ids %}
+                            <a href="{{ url_for('profile') }}" class="link">
+                                {% else %}
+                    <a href="{{ url_for('user_profile',id=f.friends_sourceid) }}" class="link">
+                                {% endif %}
+                <div class="row">
+                    <div class="col p-1 border_container m-1">
+                        {% if pics != None %}
+                            {% if pics[f.friends_sourceid].profile_picture_userid==f.friends_sourceid %}
+                                <img src="{{ url_for('static',filename='cropped_profile/'+pics[f.friends_sourceid].profile_picture)}}" alt="Profile Picture" width="80%" height="100" class="borders">
+                            {% else %}
+                                <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="80%" height="100" class="borders">
+                            {% endif %}
+                        {% endif %}
+                        <div class="row">
+                    <div class="col-12 name_container">
+                        <span class="friends_names">{{ f.source_friends.user_fname }} {{ f.source_friends.user_lname }}</span>
+                    </div>
+                </div>
+        </div>
+            </div>
+            </a>
+                                            {% endif %}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% else %}
+                                    <p class="text"> No friends found</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-md-5">
+        <div class="row profile_info_nav">
+    {% if post != None %}
+            <div class="col">
+
+
+                
+                {% for p in post %}
+
+                <div class="row mt-2">
+                    <div class="col background">
+                        
+                        <div class="mt-3 mb-3">
+                            <h5>Posts</h5>
+                            <hr>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-1">
+                                {% if profile != None %}
+                                {% if profile.profile_picture != None %}
+                                <a href="{{ url_for('profile',id=profile.pictureuser.user_id)}}">
+                                            <img src="{{ url_for('static',filename='cropped_profile/'+profile.profile_picture)}}" alt="Profile Picture" width="155%" class="pic">
+                                </a>
+                                {% else %}
+            
+                                <a href="{{ url_for('profile',id=profile.pictureuser.user_id)}}">
+                                            <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="155%" class="pic">
+                                </a>
+            
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="col-8">
+                               <span class="post_title mb-2 mt-0">
+                                <b>
+                                    {{ p.postuser.user_fname }}
+                                    {% if p.postuser.user_mname != None %}
+                                     {{ p.postuser.user_mname }} 
+                                     {% else %}
+                                     <span> </span>
+                                     {% endif %}
+                                     {{ p.postuser.user_lname }}
+                                </b>
+                               <br>
+                               <i class="post_date">
+                                {% set now = current_time %}
+                                {% set updated_at = p.post_updated_at %}
+                                {% set time_diff = now - updated_at %}
+
+                                {% if time_diff.days > 7 %}
+                                {{ updated_at.strftime('%B %d') }}
+                                {% elif time_diff.days >= 1 %}
+                                {{ time_diff.days }} days ago
+                                {% elif time_diff.seconds >= 3600 %}
+                                {{ time_diff.seconds // 3600 }} hours ago
+                                {% elif time_diff.seconds >= 60 %}
+                                {{ time_diff.seconds // 60 }} minutes ago
+                                {% else %}
+                                just now
+                                {% endif %}
+                               </i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mt-2 mb-2 navbar-nav-scroll">
+                                {% if p.post != None %}
+                                <a href="{{ url_for('comment_post_profile',id=p.post_id)}}" class="link">
+                                {{ p.post }}
+                                </a>
+                                {% else %}
+                                <span> </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+
+                                {% if p.post_media != None %}
+                                {% if '.mp4' in p.post_media %}
+                                <a href="{{ url_for('comment_post_profile',id=p.post_id)}}" class="link">
+                                <embed src="{{ url_for('static',filename='post_media/'+p.post_media)}}" width="100%" alt="post">
+                                </a>
+                                    {% else %}
+                                    <a href="{{ url_for('comment_post_profile',id=p.post_id)}}" class="link">
+                                    <img src="{{ url_for('static',filename='post_media/'+p.post_media)}}" width="100%" alt="post">
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                <span> </span>
+                                {% endif %}
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">
+                                {% if p.likepost | length == 1 %}
+                                <h5 class="badge badge-pill badge-secondary">
+                                    <i class="fa-solid fa-thumbs-up like p-1 mt-2"></i><span class="mb-4"> {{ p.likepost | length }} Like</h5>
+                                {% elif p.likepost | length >= 1 %}
+                                <h5 class="badge badge-pill badge-secondary">
+                                    <i class="fa-solid fa-thumbs-up like p-1 mt-2"></i><span class="mb-4"> {{ p.likepost | length }} Likes</h5>
+                                {% else %}
+                                <h5 class="badge badge-pill badge-secondary">
+                                    <i class="fa-solid fa-thumbs-up like p-1 mt-2"></i><span class="mb-4"> {{ p.likepost | length }} Likes</span></h5>
+                                    {% endif %}
+                            </div>
+                            <div class="col edit_icon">
+                                {% if p.postcomment | length == 0 %}
+                                <h5 class="badge badge-pill badge-secondary">
+                                    <span class="mb-4">0 </span><i class="fa-regular fa-message p-1 mt-2"></i></h5>
+                                {% elif p.postcomment | length >= 1 %}
+                                <h5 class="badge badge-pill badge-secondary">
+                                    <span class="mb-4">{{ p.postcomment | length }} <i class="fa-solid fa-message p-1 mt-2"></i></h5>
+                                {% else %}
+                                <h5 class="badge badge-pill badge-secondary">
+                                    <span class="mb-4">{{ p.postcomment | length }} </span><i class="fa-solid fa-message p-1 mt-2"></i></h5>
+                                    {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <hr>
+                            <div class="col-6">
+                                {% if like[p.post_id] %}
+                                <a href="{{ url_for('likes_post', like_post_id = p.post_id) }}" class="button btn form-control mb-3"><i class="fa-solid fa-thumbs-up likes"></i></a>
+                                {% else %}
+                                <a href="{{ url_for('likes_post', like_post_id = p.post_id) }}" class="btn button form-control mb-3"><i class="fa-solid fa-thumbs-up"></i></a>
+                                {% endif %}
+                            </div>
+                            <div class="col-6 text">
+                                
+                                <a href="{{ url_for('comment_profile',id=p.post_id)}}" class="button btn form-control mb-3">
+                                    <i class="fa-regular fa-comment-dots"></i>
+                                </a>
+                            </div>
+                            <hr>
+                                        {% if comment[p.post_id] != None %}
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12 pt-2">
+                                        <div class="row edit_icons">
+                                            <div class="col">
+                                            <div class="row">
+                                                <div class="col-1">
+                                                    {% if compic != None %}
+                                                    {% if compic.profile_picture_userid == comment[p.post_id].commentuser.user_id %}
+
+                                                                <img src="{{ url_for('static',filename='cropped_profile/'+compic.profile_picture)}}" alt="Profile Picture" width="255%" class="comment_pic">
+                                                    {% else %}
+                                
+                                                                <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="255%" class="comment_pic">
+                                
+                                                                {% endif %}
+                                                                {% endif %}
+                                                    
+                                                  </div>
+                                                <div class="col-7 mx-3 comment rounded-pill">
+                                                    {% if p.post_userid == ids %}
+                                                    <a href="{{ url_for('profile') }}" class="link">
+                                                        {% else %}
+                                            <a href="{{ url_for('user_profile',id=p.post_userid)}}" class="link">
+                                            
+                                                        {% endif %}
+                                          <span class="comment_name mx-2"><b> {{comment[p.post_id].commentuser.user_fname}}
+                                            {% if comment[p.post_id].commentuser.user_mname != None %}
+                                            {{comment[p.post_id].commentuser.user_mname}}
+                                            {% else %}
+                                            <span></span>
+                                            {% endif %}
+                                            {{comment[p.post_id].commentuser.user_lname}} </b></span> 
+                                         </a>
+                                         <div class="row">
+                                            <div class="col mx-3">
+                                        <span class="comment_name">{{ comment[p.post_id].comment }}</span>
+                                            </div>
+                                         </div>
+                                        </div>
+                                            <div class="col"></div>
+                                         <div class="col-12 mx-3 mb-3">
+                                         <span class="comment_date">
+                                            {% set now = current_time %}
+                                      {% set updated_at = comment[p.post_id].comment_updatedat %}
+                                      {% set time_diff = now - updated_at %}
+
+                                      {% if time_diff.days > 7 %}
+                                        {{ updated_at.strftime('%B %d') }}
+                                      {% elif time_diff.days >= 1 %}
+                                        {{ time_diff.days }} days ago
+                                      {% elif time_diff.seconds >= 3600 %}
+                                        {{ time_diff.seconds // 3600 }} hours ago
+                                      {% elif time_diff.seconds >= 60 %}
+                                        {{ time_diff.seconds // 60 }} minutes ago
+                                      {% else %}
+                                        just now
+                                      {% endif %}
+                                            </span>
+                                       </div>
+
+                                                
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                        {% else %}
+                                        {% endif %}
+                            <div class="col-12">
+                              <form class="form-group mb-4" method="post" action="{{ url_for('comment_post_profile',id=p.post_id)}}">
+                              <div class="row">
+                                <label class="mb-2 texts">Comment:</label>
+                                <div class="col-1">
+                                    {% if profile != None %}
+
+                                    <img src="{{ url_for('static',filename='cropped_profile/'+ profile.profile_picture)}}" alt="Profile Picture" width="225%" class="pic">
+  
+                                    {% else %}
+  
+                                    <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="225%" class="pic">
+  
+                                    {% endif %}
+                                </div>
+                                <div class="col-9 mx-1">
+                              <input type="text" name="comment" class="form-control rounded-pill" placeholder="Your Opinion?">
+                            </div>
+                            <div class="col">
+                              <button type="submit" class="btn button"><i class="fa-solid fa-paper-plane"></i></button>
+                            </div>
+                            </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+                
+            </div>
+                {% endif %}
+
+                {% if post == [] %}
+            <p class="text"> No Posts available yet</p>
+                {% endif %}
+        </div>
+    </div>
+    <div class="col-md-1">
+    </div>
+    
+
+</div>
+
+</div>
+
+
+{% endif %}
+
+{% endblock %}
+
+{% block friend %}
+
+
+
+{% endblock %}
+
+
+     
+     

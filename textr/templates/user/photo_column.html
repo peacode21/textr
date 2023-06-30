@@ -1,0 +1,51 @@
+{% extends 'user/index.html' %}
+
+{% block extstyle %}
+      
+<style type="text/css" rel="stylesheet">
+    .column{
+        height:70px;
+        color:white;
+        margin-bottom: 2%;
+        text-decoration: snow;
+        background-color: rgba(243, 243, 243, 0.163);
+        border-radius: 2%;
+    }
+    .cols{
+        font-size: larger;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="col-10 list_icons friendreq edit_icons">
+<div class="row pt-2 px-5">
+    <a href="{{ url_for('profile_pics')}}" class="column">
+        <p class="mt-4 cols">
+        Profile Pictures
+        </p>
+    </a>
+    <a href="{{ url_for('cover_pics')}}" class="column">
+        <p class="mt-4 cols">
+            Cover Photos
+        </p>
+    </a>
+    <a href="{{ url_for('post_media')}}" class="column">
+        <p class="mt-4 cols">
+            Uploads
+        </p>
+    </a>
+</div>
+</div>
+
+{% endblock %}
+
+
+
+{% block friend %}
+
+
+
+{% endblock %}

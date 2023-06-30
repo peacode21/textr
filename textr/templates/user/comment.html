@@ -1,0 +1,259 @@
+{% extends 'user/index.html' %}
+
+
+
+
+                      
+{% block content %}
+<div class="col-7 content navs">
+
+                                      
+  {% with m=get_flashed_messages()%}
+  {% if m:%}
+    {% for msg in m:%}
+      <p class="alert alert-success">{{msg}}</p>
+    {%endfor%}
+  {% endif %}
+  {% endwith %}
+  
+  {% if post != None %}
+
+  {% for p in post %}
+
+  <div class="row mt-2">
+      <div class="col background">
+          <div class="row mt-3">
+              <div class="col-1">
+               
+                  {% if pics != None %}
+                {% if pics[p.post_userid].profile_picture_userid==p.post_userid %}
+                              <img src="{{ url_for('static',filename='cropped_profile/'+pics[p.post_userid].profile_picture)}}" alt="Profile Picture" width="155%" class="pic">
+                  {% else %}
+
+                              <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="155%" class="pic">
+
+                  
+                              {% endif %}
+                              {% endif %}
+              </div>
+              <div class="col-8">
+                 <span class="post_title mb-2 mt-0"><b>
+                  
+            {% if p.post_userid == ids %}
+            <a href="{{ url_for('profile') }}" class="link">
+                {% else %}
+    <a href="{{ url_for('user_profile',id=p.post_userid)}}" class="link">
+    
+                {% endif %}
+                  {{ p.postuser.user_fname }}{% if p.postuser.user_mname != None %} {{ p.postuser.user_mname }} {% else %}<span> </span>{% endif %}{{ p.postuser.user_lname }}</b></a>
+                 <br>
+                 <i class="post_date">
+                  {% set now = current_time %}
+                  {% set updated_at = p.post_updated_at %}
+                  {% set time_diff = now - updated_at %}
+
+                  {% if time_diff.days > 7 %}
+                    {{ updated_at.strftime('%B %d') }}
+                  {% elif time_diff.days >= 1 %}
+                    {{ time_diff.days }} days ago
+                  {% elif time_diff.seconds >= 3600 %}
+                    {{ time_diff.seconds // 3600 }} hours ago
+                  {% elif time_diff.seconds >= 60 %}
+                    {{ time_diff.seconds // 60 }} minutes ago
+                  {% else %}
+                    just now
+                  {% endif %}
+                  </i>
+                
+                  </span>
+              </div>
+              <div class="col edit_icon">
+                  <a href="#" class="link text post_date btn button">Edit <i class="fa-solid fa-edit"></i></a>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col mt-2 mb-2 navbar-nav-scroll">
+                  {% if p.post != None %}
+                  <a href="{{ url_for('comment',id=p.post_id)}}" class="link">
+                  {{ p.post }}
+                    </a>
+                  {% else %}
+                  <span> </span>
+                  {% endif %}
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+
+                {% if p.post_media != None %}
+                {% if '.mp4' in p.post_media %}
+                <a href="#" class="link">
+                <embed src="{{ url_for('static',filename='post_media/'+p.post_media)}}" width="100%" alt="post">
+                </a>
+                    {% else %}
+                    <a href="#" class="link">
+                    <img src="{{ url_for('static',filename='post_media/'+p.post_media)}}" width="100%" alt="post">
+                        </a>
+                    {% endif %}
+                {% else %}
+                <span> </span>
+                {% endif %}
+
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-9">
+                  {% if p.likepost | length == 1 %}
+                  <h5 class="badge badge-pill badge-secondary">
+                      <i class="fa-solid fa-thumbs-up like p-1 mt-2"></i><span class="mb-4"> {{ p.likepost | length }} Like</h5>
+                  {% elif p.likepost | length >= 1 %}
+                  <h5 class="badge badge-pill badge-secondary">
+                      <i class="fa-solid fa-thumbs-up like p-1 mt-2"></i><span class="mb-4"> {{ p.likepost | length }} Likes</h5>
+                  {% else %}
+                  <h5 class="badge badge-pill badge-secondary">
+                      <i class="fa-solid fa-thumbs-up like p-1 mt-2"></i><span class="mb-4"> {{ p.likepost | length }} Likes</span></h5>
+                      {% endif %}
+              </div>
+              <div class="col edit_icon">
+                  {% if p.postcomment | length == 0 %}
+                  <h5 class="badge badge-pill badge-secondary">
+                      <span class="mb-4">0 </span><i class="fa-regular fa-message p-1 mt-2"></i></h5>
+                  {% elif p.postcomment | length >= 1 %}
+                  <h5 class="badge badge-pill badge-secondary">
+                      <span class="mb-4">{{ p.postcomment | length }} <i class="fa-solid fa-message p-1 mt-2"></i></h5>
+                  {% else %}
+                  <h5 class="badge badge-pill badge-secondary">
+                      <span class="mb-4">{{ p.postcomment | length }} </span><i class="fa-solid fa-message p-1 mt-2"></i></h5>
+                      {% endif %}
+              </div>
+          </div>
+          <div class="row">
+              <hr>
+              <div class="col-6">
+                  {% if like[p.post_id] %}
+                  <a href="{{ url_for('like_post', like_post_id = p.post_id) }}" class="button btn form-control mb-3"><i class="fa-solid fa-thumbs-up likes"></i></a>
+                  {% else %}
+                  <a href="{{ url_for('like_post', like_post_id = p.post_id) }}" class="btn button form-control mb-3"><i class="fa-solid fa-thumbs-up"></i></a>
+                  {% endif %}
+              </div>
+              <div class="col-6 text">
+                  
+                  <a href="{{ url_for('comment',id=p.post_id)}}" class="button btn form-control mb-3">
+                      <i class="fa-regular fa-comment-dots"></i>
+                  </a>
+              </div>
+              <hr>
+{% if comment[p.post_id] != None %}
+{% for c in comment[p.post_id] %}
+  <div class="col-12">
+    <div class="row">
+      <div class="col-12">
+        <div class="row edit_icons">
+          <div class="col">
+            <div class="row">
+              <div class="col-1">
+                {% if compic != None %}
+                {% if compic.profile_picture_userid == c.commentuser.user_id %}
+
+                            <img src="{{ url_for('static',filename='cropped_profile/'+compic.profile_picture)}}" alt="Profile Picture" width="145%" class="comment_pic">
+                {% else %}
+
+                            <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="145%" class="comment_pic">
+
+                            {% endif %}
+                            {% endif %}
+                
+              </div>
+          <div class="col-7 mx-2 comment rounded-pill">
+            {% if c.comment_userid == ids %}
+            <a href="{{ url_for('profile') }}" class="link">
+                {% else %}
+    <a href="{{ url_for('user_profile',id=c.comment_userid)}}" class="link">
+    
+                {% endif %}
+          <span class="comment_name mx-3"><b> {{c.commentuser.user_fname}}
+            {% if c.commentuser.user_mname != None %}
+            {{c.commentuser.user_mname}}
+            {% else %}
+            <span></span>
+            {% endif %}
+            {{c.commentuser.user_lname}} </b></span> 
+          </a>
+            <div class="row">
+              <div class="col mx-3 mb-2">
+                <span class="comment_name">{{ c.comment }}</span>
+              </div>
+            </div>
+          </div>
+              <div class="col"></div>
+              <div class="col-12 mx-3">
+                <span class="comment_date">
+                  {% set now = current_time %}
+                  {% set updated_at = c.comment_updatedat %}
+                  {% set time_diff = now - updated_at %}
+
+                  {% if time_diff.days > 7 %}
+                    {{ updated_at.strftime('%B %d') }}
+                  {% elif time_diff.days >= 1 %}
+                    {{ time_diff.days }} days ago
+                  {% elif time_diff.seconds >= 3600 %}
+                    {{ time_diff.seconds // 3600 }} hours ago
+                  {% elif time_diff.seconds >= 60 %}
+                    {{ time_diff.seconds // 60 }} minutes ago
+                  {% else %}
+                    just now
+                  {% endif %}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+{% else %}
+                          
+                          {% endif %}
+              <div class="col-12">
+                <form class="form-group mb-4" method="post" action="{{ url_for('comment_post',id=p.post_id)}}">
+                <div class="row">
+                  <label class="mb-2 texts">Comment:</label>
+                  <div class="col-1">
+                    {% if profile != None %}
+
+                    <img src="{{ url_for('static',filename='cropped_profile/'+ profile.profile_picture)}}" alt="Profile Picture" width="145%" class="pic">
+
+                    {% else %}
+
+                    <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="145%" class="pic">
+
+                    {% endif %}
+                  </div>
+                  <div class="col-9 mt-2">
+                <input type="text" name="comment" class="form-control rounded-pill" placeholder="Your Opinion?">
+              </div>
+              <div class="col">
+                <button type="submit" class="btn button mt-2"><i class="fa-solid fa-paper-plane"></i></button>
+              </div>
+              </div>
+              </form>
+              </div>
+          </div>
+      </div>
+    </div>
+
+  {% endfor %}
+
+
+{% endif %}
+
+</div>
+<div class="col-1"></div>
+
+    {% endblock %}
+
+{% block friend %}
+
+
+{% endblock %}
+

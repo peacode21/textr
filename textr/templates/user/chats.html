@@ -1,0 +1,252 @@
+{% extends 'user/index.html' %}
+
+
+                                  
+{% block friendnav %}
+
+<div class="col-md-4 message_bg list_icons contact_nav">
+    
+    <div class="row">
+        <div class="col-md-12 friend_list mb-3">
+          <div class="row">
+          <div class="col-12 mt-2">
+
+            <form class="d-flex" method="POST" action="#" >
+              <div class="col-10 pb-4 pt-2">
+              <input class="border-light bg-light form-control me-2" aria-label="Search" name="searched" type="search" id="search" placeholder="Search chats or start new">
+              </div>
+              <div class="col pb-4 pt-2 mx-1">
+              <button class="btn btn-outline-light" type="submit">
+                <i class="fa-solid fa-search"></i></button>
+              </div>
+            </form>
+
+          </div>
+         </div>
+            {% if friends != [] %}
+            {% for f in friends %}
+            {% if f.friends_targetid == session.get('user') %}
+            <a href="{{ url_for('chats',id=f.friends_sourceid)}}" class="link">
+            <div class="row mb-2">
+              <div class="col">
+                
+              {% if picsrc != None %}
+              {% if picsrc.profile_picture_userid == f.friends_sourceid %}
+
+              <img src="{{ url_for('static',filename='cropped_profile/'+picsrc.profile_picture)}}" alt="Textr Logo" width="100%" class="pic">
+              
+              {% else %}
+              
+              <img src="{{ url_for('static',filename='images/logo2.png')}}" alt="Textr Logo" width="100%" class="pic">
+
+              {% endif %}
+              {% endif %}
+              </div>
+                <div class="col-10 mt-2 edit_icons">
+                <p class="contact">
+                  {{ f.source_friends.user_fname }}
+                  {{ f.source_friends.user_lname }}
+                  {% if f.source_friends.user_mname != None %}
+                  <span>{{ f.source_friends.user_mname }}</span>
+                  {% else %}
+                  <span></span>
+                  {% endif %}
+                </p>
+                <p>{% if one_message != None %}
+                  {% if f.friends_sourceid != session.get('user') %}
+                  {% if f.friends_sourceid == one_message.message_sourceid %}
+                  {{ one_message.message }}
+                  {% elif f.friends_sourceid == one_message.message_targetid %}
+                  {{ one_message.message }}
+                  {% else %}
+                  <span> </span>
+                  {% endif %}
+                  {% endif %}
+                  {% endif %}</p>
+              <hr>
+                </div>
+              </div>
+              </a>
+            
+            {% endif %}
+    
+            {% if f.friends_sourceid == session.get('user') %}
+            <a href="{{ url_for('chats',id=f.friends_targetid)}}" class="link">
+              <div class="row mb-2">
+                <div class="col">
+                  
+              {% if picsrc != None %}
+              {% if picsrc.profile_picture_userid == f.friends_targetid %}
+
+              <img src="{{ url_for('static',filename='cropped_profile/'+picsrc.profile_picture)}}" alt="Textr Logo" width="100%" class="pic">
+              
+              {% else %}
+              
+              <img src="{{ url_for('static',filename='images/logo2.png')}}" alt="Textr Logo" width="100%" class="pic">
+
+              {% endif %}
+              {% endif %}
+              </div>
+                <div class="col-10 mt-2 edit_icons">
+                  <p class="contact">{{ f.target_friends.user_fname }}
+                    {{ f.target_friends.user_lname }}
+                    {% if f.target_friends.user_mname != None %}
+                    <span>{{ f.target_friends.user_mname }}</span>
+                    {% else %}
+                    <span></span>
+                    {% endif %}
+                  </p>
+                  <p>{% if one_message != None %}
+                    {% if f.target_friends.user_id != session.get('user') %}
+                    {% if f.target_friends.user_id == one_message.message_sourceid %}
+                  {{ one_message.message }}
+                  {% elif f.target_friends.user_id == one_message.message_targetid %}
+                  {{ one_message.message }}
+                  {% else %}
+                  <span> </span>
+                  {% endif %}
+                  {% endif %}
+                  {% endif %}</p>
+          <hr>
+                </div>
+              </div>
+            
+            </a>
+            
+          {% endif %}
+  
+          {% endfor %}
+          {% else %}
+          <span>No friends yet? <a href="{{ url_for('friendreq')}}" class="link">Find Friends Now</a></span>
+          {% endif %}
+        </div>
+      </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="col-8 message_bg list_icons friendreq edit_icons message_nav">
+
+  {% if message == [] %}
+
+  <div class="row">
+    <div class="col-3 mt-5 align">
+  <i class="fa-regular fa-paper-plane message_icon p-5 mt-5"></i>
+    </div>
+    <div class="col-12"></div>
+    <div class="col-6 align">
+      
+    <p class="message_text mx-4">Start a new chat here</p>
+    </div>
+  </div>
+
+
+
+  {% endif %}
+
+  {% if friend != None %}
+    {% if message != [] %}
+    {% for m in message %}
+        {% if m.message_targetid == session.get('user') %}
+        <div class="row">
+          <div class="col-5">
+            <div class="row">
+              <div class="col mb-2 p-2 rounded-pill chats">
+                <p class="m-2">{{ m.message }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-6"></div>
+        </div>
+        {% elif m.message_sourceid != session.get('user') %}
+        <div class="row">
+          <div class="col-5">
+            <div class="row">
+              <div class="col mb-2 p-2 rounded-pill chats">
+                <p class="m-2">{{ m.message }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-6"></div>
+        </div>
+        {% else %}
+        <span> </span>
+        {% endif %}
+
+        
+
+        {% if m.message_sourceid == session.get('user') %}
+        <div class="row">
+          <div class="col-6"></div>
+          <div class="col-5">
+            <div class="row">
+              <div class="col mb-2 p-2 rounded-pill chat">
+                <p class="mx-2">{{ m.message }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% elif m.message_targetid != session.get('user') %}
+        <div class="row">
+          <div class="col-6"></div>
+          <div class="col-5">
+            <div class="row">
+              <div class="col mb-2 p-2 rounded-pill chat">
+                <p class="mx-2">{{ m.message }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <span> </span>
+        {% endif %}
+    
+    {% endfor %}
+    {% endif %}
+    <div class="row input-field">
+    <div class="col-12">
+      
+      {% if friend.friends_sourceid == session.get('user') %}
+      <form method="post" action="{{ url_for('send_message',id=friend.friends_targetid)}}">
+        <div class="row">
+          <div class="col">
+            <input type="text" class="form-control border-light" name="chat" placeholder="Type your message here">
+          </div>
+          <div class="col-1">
+            <button class="btn btn-outline-light" type="submit">
+              <i class="fa-solid fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </form>
+        
+    {% elif friend.friends_targetid == session.get('user') %}
+    <form method="post" action="{{ url_for('send_message',id=friend.friends_sourceid)}}">
+      <div class="row">
+        <div class="col">
+          <input type="text" class="form-control border-light" name="chat" placeholder="Type your message here">
+        </div>
+        <div class="col-1">
+          <button class="btn btn-outline-light" type="submit">
+            <i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </form>
+    {% else %}
+    <span> </span>
+    {% endif %}
+      {% endif %}
+    </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block friend %}
+
+
+{% endblock %}

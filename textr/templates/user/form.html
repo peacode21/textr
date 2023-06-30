@@ -1,0 +1,255 @@
+{% extends 'user/index.html' %}
+
+{% block style %}
+
+
+<style type="text/css" rel="stylesheet">
+.optional{
+    color: rgba(128, 128, 128, 0.452);
+}
+label{
+    font-size: large;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.center{
+    border:2px solid rgba(25, 25, 245, 0.705);
+    border-radius: 8%;
+}
+.link{
+    text-decoration: cornsilk;
+}
+.form_nav{
+    font-size: large;
+}
+.space{
+    justify-content: space-between;
+}
+
+
+</style>
+{% endblock %}
+
+{% block form %}
+<div class="row mt-1 mb-1">
+        <div class="col-md-2 p-5">
+
+        </div>
+   
+        <div class="center col-8 mt-1">
+            <div class="p-5">
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col-4">
+                        <img src="{{ url_for('static',filename='images/banner1.png')}}" width="100%">
+
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+            
+            {% with m=get_flashed_messages() %}
+            {% if m: %}
+            {% for msg in m%}
+            <p class="alert alert-danger">{{msg}}</p>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+                <hr>
+            <h2>Register</h2>
+        <form method="post" action="{{ url_for('register')}}">
+            <div class="row mt-2">
+                <div class="col">
+                    <label>First Name: </label>
+                </div>
+                <div class="col-10">
+                    <input type="text" class="form-control border-info" name="fname" placeholder="Input first name">
+                    
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <label>Middle Name: </label>
+                </div>
+                <div class="col-10">
+                    <input type="text" class="form-control border-info" name="mname" placeholder="Input middle name (Optional)">
+                    
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <label>Last Name: </label>
+                </div>
+                <div class="col-10">
+                    <input type="text" class="form-control border-info" name="lname" placeholder="Input last name">
+                    
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <label>Username: </label>
+                </div>
+                <div class="col-10">
+                    <input type="text" class="form-control border-info" name="uname" placeholder="Input Username">
+                    
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <label>Email: </label>
+                </div>
+                <div class="col-10">
+                    <span id="emails"></span>
+                    <input type="email" class="form-control border-info" name="email" placeholder="Input Email address">
+                    
+                    
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <label>Phone Number: </label>
+                </div>
+                <div class="col-10">
+                    <input type="text" class="form-control border-info" name="phone" placeholder="Input Phone number">
+                    
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <label>Gender: </label>
+                </div>
+                <div class="col-10">
+                    <div class="row">
+                        <div class="col-2">
+                            <input type="radio" name="gender" value="male" checked><span> Male</span>
+                        </div>
+                        <div class="col-3">
+                            <input type="radio" name="gender" value="female"><span> Female</span>
+                        </div>
+                        <div class="col-4">
+                            <input type="radio" name="gender" value="others"><span> Prefer not to say</span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class="row space">
+                        <div class="col-2">
+                    <label>Country: </label>
+                        </div>
+                        <div class="col-8">
+                        <select name="country" class="form-select form-select-md mb-1 border-info" id="country">
+                            <option selected value="">Choose Your Country...</option>
+                            {% if country != [] %}
+                            {% for c in country %}
+                            <option value="{{ c.country_id }}" class="form-control border-dark">{{ c.country }}</option>
+                        {% endfor %}
+                        {% endif %}
+                        </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row space">
+                        <div class="col-2">
+                            <label>State: </label>
+                        </div>
+                        <div class="col-10">
+                            <div id="state"></div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            <div class="row mt-2">
+                <div class="col-2">
+                    <label>Password: </label>
+                </div>
+                <div class="col-10">
+                    <input type="password" class="form-control border-info" id="pwd" name="pwd" placeholder="Input your password">
+                    
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <label>Confirm Password: </label>
+                </div>
+                <div class="col-10">
+                    <span id="cpwds"></span>
+                    <input type="password" class="form-control border-info" id="cpwd" name="cpwd" placeholder="Confirm your password">
+                </div>
+            </div>
+            
+            <div class="row mt-2">
+                <div class="col-2"></div>
+                <div class="col-10">
+                    <input type="checkbox" id="check"><span> Check here to indicate that you have read and agree to the <a href="#" class="link">terms and conditions of this service</a></span>
+                    <br>
+                    <button id="btn" type="submit" class="btn btn-primary form-control mb-3" disabled>Register</button>
+                    <p class="form_nav">Already registered? Login <a href="{{ url_for('login_form')}}" class="link">here</a></p>
+                </div>
+            </div>
+           
+        </form>
+
+    </div>
+    </div>
+
+    <div class="col-md-2">
+
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block inlinejs %}
+
+<script type="text/javascript">
+
+
+    $(document).ready(function(){
+      $('#country').change(function(){
+            var country = $(this).val()
+            $.ajax({
+                url:"/state/"+country,
+                type:"GET",
+                success:function(response){
+                    $("#state").html(response)
+                },
+            error:function(e){
+              console.log(e)
+            }
+    
+            })
+            })
+
+    $('#cpwd').keyup(function(){
+        var cpwd = $(this).val()
+        var pwd = $('#pwd').val()
+        if(pwd != cpwd){
+            $('#cpwds').html('Password Not matched')
+        }else{
+            $('#cpwds').html('')
+        }
+    })
+    
+
+    $('#check').click(function(){
+            
+            var box = $('#check').prop('checked')
+            
+                    if (box == true ){
+                          $('#btn').removeAttr('disabled')
+                    }else{
+                      $('#btn').prop('disabled',true)
+                    }
+              });
+            
+})
+
+</script>
+
+{% endblock %}
+

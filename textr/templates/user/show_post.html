@@ -1,0 +1,27 @@
+{% extends 'user/index.html' %}
+
+
+
+
+
+{% block content %}
+
+<div class="col-5 list_icons friendreq edit_icons navbar-nav-scroll">
+
+    <div class="row">
+        <div class="col-12 p-1 border_container m-1">
+   
+        {% if post_media != None %}
+        {% if '.mp4' in post_media.post_media %}
+        <embed src="{{ url_for('static',filename='post_media/'+post_media.post_media)}}" width="100%" alt="post" class="borders">
+            {% else %}
+        <img src="{{ url_for('static',filename='post_media/'+post_media.post_media)}}" width="100%" alt="post" class="borders">
+        {% endif %}
+    {% endif %}
+</div>
+</div>
+
+</div>
+
+{% endblock %}
+

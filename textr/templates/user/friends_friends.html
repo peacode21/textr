@@ -1,0 +1,163 @@
+{% extends 'user/index.html' %}
+
+
+
+      
+{% block extstyle %}
+      
+<style type="text/css" rel="stylesheet">
+
+div{
+    justify-content: left;
+}
+.names{ 
+    font-size: small;
+}
+.name_container{
+    text-align: center;
+}
+.borders{
+    border-top-right-radius: 3%;
+    border-top-left-radius: 3%;
+    background-color: rgba(101, 90, 90, 0.408);
+}
+.border_container{
+    border-radius: 3%;
+    background-color: rgba(101, 90, 90, 0.408);
+    border: 1px solid rgb(80, 79, 79);
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="col-10 list_icons friendreq edit_icons navs">
+
+    <div class="row">
+        <div class="col">
+            {% if user != [] %}
+            {% if friends_friends != []%}
+        <div class="row">
+            {% for f in friends_friends %}
+            {% if f.friends_targetid == user.user_id %}
+            <div class="col-2">
+                <div class="row">
+                    <div class="col p-1 border_container m-1">
+                        {% if f.friends_sourceid == ids %}
+                        <a href="{{ url_for('profile') }}" class="link">
+                            {% else %}
+                            {% if f.friends_targetid != ids %}
+                        <a href="{{ url_for('user_profile',id=f.friends_sourceid) }}" class="link">
+                            {% else %}
+                            <a href="{{ url_for('others_profile',id=f.friends_sourceid) }}" class="link">
+                            {% endif %}
+                            {% endif %}
+
+                        {% if pics != None %}
+                            {% if pics[f.friends_sourceid].profile_picture_userid==f.friends_sourceid %}
+                                <img src="{{ url_for('static',filename='cropped_profile/'+pics[f.friends_sourceid].profile_picture)}}" alt="Profile Picture" width="100%" height="150" class="borders">
+                            {% else %}
+                                <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="100%" height="150" class="borders">
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                        <div class="row">
+                    <div class="col-12 name_container">
+                        <span class="names">{{ f.source_friends.user_fname }} {{ f.source_friends.user_lname }}</span>
+                    </div>
+                    <div class="col">
+                        <div class="row px-1">
+                            <div class="col-12">
+                                {% if f.friends_sourceid == ids %}
+                                <a href="{{ url_for('profile') }}" class="link">
+                                    <button class="btn btn-primary form-control names">Visit Profile</button>
+                                </a>
+                                {% else %}
+                                    {% if f.friends_targetid != ids %}
+                                        <a href="{{ url_for('user_profile',id=f.friends_sourceid) }}" class="link">
+                                            <button class="btn btn-primary form-control names">View Profile</button>
+                                        </a>
+                                        {% else %}
+                                        <a href="{{ url_for('friend_request_send',id=f.source_friends.user_id) }}" class="link">
+                                            <button class="btn btn-primary form-control names">Add Friend</button>
+                                        </a>
+                                            {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
+            {% else %}
+            
+            <div class="col-2">
+                <div class="row">
+                    <div class="col p-1 border_container m-1">
+                        {% if f.friends_targetid == ids %}
+                        <a href="{{ url_for('profile') }}" class="link">
+                            {% else %}
+                            {% if f.friends_targetid != [] %}
+                        <a href="{{ url_for('user_profile',id=f.friends_targetid) }}" class="link">
+                            {% else %}
+                            <a href="{{ url_for('others_profile',id=f.friends_targetid) }}" class="link">
+                            {% endif %}
+                            {% endif %}
+
+                        {% if pic != None %}
+                            {% if pic[f.friends_targetid].profile_picture_userid==f.friends_targetid %}
+                                <img src="{{ url_for('static',filename='cropped_profile/'+pic[f.friends_targetid].profile_picture)}}" alt="Profile Picture" width="100%" height="150" class="borders">
+                            {% else %}
+                                <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="100%" height="150" class="borders">
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                        <div class="row">
+                    <div class="col-12 name_container">
+                        <span class="names">{{ f.target_friends.user_fname }} {{ f.target_friends.user_lname }}</span>
+                    </div>
+                    <div class="col">
+                        <div class="row px-1">
+                            <div class="col-12">
+                                {% if f.friends_targetid == ids %}
+                                <a href="{{ url_for('profile') }}" class="link">
+                                    <button class="btn btn-primary form-control names">Visit Profile</button>
+                                </a>
+                                {% else %}
+                                {% if f.friends_sourceid == ids %}
+                                        <a href="{{ url_for('user_profile',id=f.friends_targetid) }}" class="link">
+                                            <button class="btn btn-primary form-control names">View Profile</button>
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ url_for('friend_request_send',id=f.target_friends.user_id) }}" class="link">
+                                        <button class="btn btn-primary form-control names">Add Friend</button>
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+            {% else %}
+            <span class="list_icons"> No friends found... </span>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block friend %}
+
+{% endblock %}
+
+

@@ -1,0 +1,146 @@
+{% extends 'user/index.html' %}
+
+{% block extstyle %}
+
+
+
+  <style type="text/css" rel="stylesheet">
+    
+    div{
+        justify-content: left;
+    }
+    body{
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+    .all{
+      color: white;
+    }
+    .middle{
+      min-height: 500px;
+    }
+    .position-sticky{
+      top: 0em;
+    }
+    .content{
+      color: rgb(255, 255, 255);
+    }
+    .nav{
+      text-align: center;
+    }
+    .footer{
+      min-height:200px;
+    }
+    .link{
+      text-decoration: aliceblue;
+    }
+    #search{
+      color: ghostwhite;
+    }
+    .logo{
+      border-radius: 50%;
+    }
+    .pic_border{
+        border: 1px solid white;
+    }
+    .footer{
+        justify-content: space-around;
+        text-align: center;
+    }
+  </style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="col-10 list_icons friendreq edit_icons navs">
+<div class="row pt-2">
+    <h3>Uploads</h3>
+
+    {% if media != [] %}
+    {% for m in media %}
+    {% if m.post_media %}
+    <div class="col-2">
+      <div class="row">
+          <div class="col p-1 border_container m-1">
+            <a href="{{ url_for('show_post',id=m.post_id)}}" class="link">
+              
+                    {% if '.mp4' in m.post_media %}
+                    <embed src="{{ url_for('static',filename='post_media/'+m.post_media)}}" width="100%" alt="post" class="borders">
+                        {% else %}
+                    <img src="{{ url_for('static',filename='post_media/'+m.post_media)}}" width="100%" alt="post" class="borders">
+                    {% endif %}
+                    </a>
+                  
+  </div>
+</div>
+  </div>
+  {% endif %}
+  {% endfor %}
+                  {% else %}
+                  <p>No Uploads yet, <a href="{{ url_for('new_profile_post')}}" class="link" data-bs-toggle="modal" data-bs-target="#exampleModal3">Create New Upload</a> </p>
+              {% endif %}
+</div>
+  </div>
+
+{% endblock %}
+
+
+{% block friend %}
+
+
+{% endblock %}
+
+
+      
+{% block inlinejs %}
+
+
+
+<!-- Post Modal -->
+<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content body">
+      <div class="modal-header">
+        <h5 class="text" id="exampleModalLabel">Create Post</h5>
+        <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form action="{{ url_for('new_profile_post')}}" method="post" enctype="multipart/form-data">
+      <div class="modal-body">
+            <div class="row">
+                <div class="col-1">
+                    {% if profile != None %}
+                    {% if profile.profile_picture != None %}
+
+                    <a href="{{ url_for('profile',id=profile.pictureuser.user_id)}}">
+                                <img src="{{ url_for('static',filename='cropped_profile/'+profile.profile_picture)}}" alt="Profile Picture" width="145%" class="pic">
+                    </a>
+
+                    {% else %}
+
+                    <a href="{{ url_for('profile',id=profile.pictureuser.user_id)}}">
+                                <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="145%" class="pic">
+                    </a>
+
+                    {% endif %}
+                    {% endif %}
+                </div>
+                <div class="col-11 texts">Release your thoughts here!</div>
+            <div class="col">
+                <textarea type="text" name="content" placeholder="Release Your Thoughts Here!" class="form-control mt-2 textarea"></textarea>
+            </div>
+              <div class="col-12">
+                  <input type="file" name="pix" class="form-control mt-2 button">
+              </div>
+          </div>
+         
+      </div>
+      <div class="modal-footer">
+        <input type="submit" class="btn btn-light form-control mt-2" value="Create Post">
+      </div>
+     </form>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

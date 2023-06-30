@@ -1,0 +1,144 @@
+{% extends 'user/index.html' %}
+
+
+      
+{% block extstyle %}
+      
+<style type="text/css" rel="stylesheet">
+
+div{
+    justify-content: left;
+}
+.names{ 
+    font-size: small;
+}
+.name_container{
+    text-align: center;
+}
+.borders{
+    border-top-right-radius: 3%;
+    border-top-left-radius: 3%;
+    background-color: rgba(101, 90, 90, 0.408);
+}
+.border_container{
+    border-radius: 3%;
+    background-color: rgba(101, 90, 90, 0.408);
+    border: 1px solid rgb(80, 79, 79);
+}
+
+</style>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="col-10 list_icons friendreq edit_icons navs">
+
+    {% with m=get_flashed_messages()%}
+    {% if m:%}
+      {% for msg in m:%}
+        {{msg|safe}}
+      {%endfor%}
+    {% endif %}
+    {% endwith %}
+
+    <h6>Friend Requests</h6>
+
+    {% if friendrequest != [] %}
+<div class="row">
+    {% for f in friendrequest %}
+    <div class="col-2">
+        <div class="row">
+            <div class="col p-1 border_container m-1">
+                {% if pics != None %}
+                    {% if pics[f.friend_request_sourceid].profile_picture_userid==f.friend_request_sourceid %}
+                        <img src="{{ url_for('static',filename='cropped_profile/'+pics[f.friend_request_sourceid].profile_picture)}}" alt="Profile Picture" width="100%" class="borders">
+                    {% else %}
+                        <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="100%" class="borders">
+                    {% endif %}
+                {% endif %}
+                <div class="row">
+            <div class="col-12 name_container">
+                <span class="names">{{ f.source_friend_request.user_fname }} {{ f.source_friend_request.user_lname }}</span>
+            </div>
+            <div class="col">
+                <div class="row px-1">
+                    <div class="col-12">
+                        <a href="{{ url_for('recieved_request',id=f.friend_request_sourceid)}}" class="link">
+                            <button class="btn btn-primary form-control names">Confirm</button>
+                        </a>
+                    </div>
+                    <div class="col-12">
+                        <a href="{{ url_for('recieved_request_delete',id=f.friend_request_sourceid)}}" class="link">
+                            <button class="btn button form-control names">Delete</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+    {% endfor %}
+</div>
+    {% else %}
+    <span class="list_icons"> No friend requests... Find friends</span>
+    {% endif %}
+    <hr>
+    
+<div class="row">
+    <div class="col">
+
+        <h6>Friend Suggestions</h6>
+        {% if users != [] %}
+    <div class="row">
+        {% for u in users %}
+        {% if u.user_id != id %}
+        <div class="col-2">
+            <div class="row">
+        <div class="col p-1 border_container m-1">
+                    {% if pic != None %}
+                        {% if pic[u.user_id].profile_picture_userid==u.user_id %}
+                            <img src="{{ url_for('static',filename='cropped_profile/'+pic[u.user_id].profile_picture)}}" alt="Profile Picture" width="100%" height="150" class="borders">
+                        {% else %}
+                            <img src="{{ url_for('static',filename='images/13.png')}}" alt="Profile Picture" width="100%" height="150" class="borders">
+                        {% endif %}
+                    {% endif %}
+            <div class="row">
+                <div class="col-12 name_container">
+                    <span class="names">{{ u.user_fname }} {{ u.user_lname }}</span>
+                </div>
+                <div class="col">
+                    <div class="row px-1">
+                        <div class="col-12">
+                            <a href="{{ url_for('friend_request_send',id=u.user_id) }}" class="link">
+                                <button class="btn btn-primary form-control names">Add Friend</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        
+    </div>
+        {% else %}
+        <span class="list_icons"> No friends available at the moment</span>
+        {% endif %}
+    </div>
+</div>
+    
+
+</div>
+
+{% endblock %}
+
+{% block friend %}
+
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'user/index.html' %}
+
+{% block content %}
+
+<div class="col-10 list_icons friendreq edit_icons navs">
+<div class="row">
+    <div class="col">
+        <p><a href="{{ url_for('new_post')}}" class="link btn button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Upload Cover Photo</a></p>
+        <p><a href="{{ url_for('new_post')}}" class="link btn button" data-bs-toggle="modal" data-bs-target="#exampleModal1">Upload Profile Picture</a></p>
+        <p><a href="{{ url_for('settings')}}" class="link btn button">Settings</a></p>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block friend %}
+
+{% endblock %}
+
+
+{% block inlinejs %}
+
+
+
+
+<!-- Picture Modal -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content body">
+        <div class="modal-header">
+          <h5 class="text" id="exampleModalLabel">Set Profile Picture</h5>
+          <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{{ url_for('picture')}}" method="post" enctype="multipart/form-data">
+        <div class="modal-body">
+              <div class="form-group row">
+                <label>Upload Profile Picture</label>
+                <div class="col">
+                    <input type="file" name="pix" class="form-control border-info mt-2">
+                </div>
+            </div>
+        </div>
+                  <div class="modal-footer">
+                    <input type="submit" class="btn btn-light form-control mt-2" value="Create Post">
+                  </div>
+       </form>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- Cover Modal -->
+  <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content body">
+        <div class="modal-header">
+          <h5 class="text" id="exampleModalLabel">Select Cover Photo</h5>
+          <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+          <form action="{{ url_for('cover_photo')}}" method="post" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div class="form-group row">
+              <label>Upload Cover Photo</label>
+              <div class="col-12">
+                  <input type="file" id="inputImage" name="pix" class="form-control border-info mt-2">
+                  </div>
+              
+          </div>
+        <div class="modal-footer">
+          <input type="submit" class="btn btn-light form-control mt-2" value="Upload Cover Photo">
+        </div>
+       </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
