@@ -4,7 +4,7 @@
                                   
 {% block friendnav %}
 
-<div class="col-md-4 message_bg list_icons contact_nav">
+<div class="col-md-4 chat_bg list_icons contact_nav">
     
     <div class="row">
         <div class="col-md-12 friend_list mb-3">
@@ -25,7 +25,7 @@
          </div>
             {% if friends != [] %}
             {% for f in friends %}
-            {% if f.friends_targetid == session.get('user') %}
+            {% if f.friends_targetid == ids %}
             <a href="{{ url_for('chats',id=f.friends_sourceid)}}" class="link">
             <div class="row mb-2">
               <div class="col">
@@ -43,7 +43,7 @@
               {% endif %}
               </div>
                 <div class="col-10 mt-2 edit_icons">
-                <p class="contact">
+                <span class="contact">
                   {{ f.source_friends.user_fname }}
                   {{ f.source_friends.user_lname }}
                   {% if f.source_friends.user_mname != None %}
@@ -51,18 +51,16 @@
                   {% else %}
                   <span></span>
                   {% endif %}
-                </p>
-                <p>{% if one_message != None %}
-                  {% if f.friends_sourceid != session.get('user') %}
-                  {% if f.friends_sourceid == one_message.message_sourceid %}
+                </span><br>
+                <span class="texts">{% if one_message != None %}
+                  {% if f.friends_sourceid == one_message.message_targetid %}
                   {{ one_message.message }}
-                  {% elif f.friends_sourceid == one_message.message_targetid %}
+                  {% elif f.friends_sourceid == one_message.message_sourceid %}
                   {{ one_message.message }}
                   {% else %}
                   <span> </span>
                   {% endif %}
-                  {% endif %}
-                  {% endif %}</p>
+                  {% endif %}</span>
               <hr>
                 </div>
               </div>
@@ -70,7 +68,7 @@
             
             {% endif %}
     
-            {% if f.friends_sourceid == session.get('user') %}
+            {% if f.friends_sourceid == ids %}
             <a href="{{ url_for('chats',id=f.friends_targetid)}}" class="link">
               <div class="row mb-2">
                 <div class="col">
@@ -88,25 +86,23 @@
               {% endif %}
               </div>
                 <div class="col-10 mt-2 edit_icons">
-                  <p class="contact">{{ f.target_friends.user_fname }}
+                  <span class="contact">{{ f.target_friends.user_fname }}
                     {{ f.target_friends.user_lname }}
                     {% if f.target_friends.user_mname != None %}
                     <span>{{ f.target_friends.user_mname }}</span>
                     {% else %}
                     <span></span>
                     {% endif %}
-                  </p>
-                  <p>{% if one_message != None %}
-                    {% if f.target_friends.user_id != session.get('user') %}
-                    {% if f.target_friends.user_id == one_message.message_sourceid %}
+                  </span><br>
+                  <span class="texts">{% if one_message != None %}
+                  {% if f.friends_targetid == one_message.message_targetid %}
                   {{ one_message.message }}
-                  {% elif f.target_friends.user_id == one_message.message_targetid %}
+                  {% elif f.friends_targetid == one_message.message_sourceid %}
                   {{ one_message.message }}
                   {% else %}
                   <span> </span>
                   {% endif %}
-                  {% endif %}
-                  {% endif %}</p>
+                  {% endif %}</span>
           <hr>
                 </div>
               </div>
@@ -149,7 +145,7 @@
   {% if friend != None %}
     {% if message != [] %}
     {% for m in message %}
-        {% if m.message_targetid == session.get('user') %}
+        {% if m.message_targetid == ids %}
         <div class="row">
           <div class="col-5">
             <div class="row">
@@ -160,7 +156,7 @@
           </div>
           <div class="col-6"></div>
         </div>
-        {% elif m.message_sourceid != session.get('user') %}
+        {% elif m.message_sourceid != ids %}
         <div class="row">
           <div class="col-5">
             <div class="row">
@@ -177,7 +173,7 @@
 
         
 
-        {% if m.message_sourceid == session.get('user') %}
+        {% if m.message_sourceid == ids %}
         <div class="row">
           <div class="col-6"></div>
           <div class="col-5">
@@ -188,7 +184,7 @@
             </div>
           </div>
         </div>
-        {% elif m.message_targetid != session.get('user') %}
+        {% elif m.message_targetid != ids %}
         <div class="row">
           <div class="col-6"></div>
           <div class="col-5">
@@ -208,7 +204,7 @@
     <div class="row input-field">
     <div class="col-12">
       
-      {% if friend.friends_sourceid == session.get('user') %}
+      {% if friend.friends_sourceid == ids %}
       <form method="post" action="{{ url_for('send_message',id=friend.friends_targetid)}}">
         <div class="row">
           <div class="col">
@@ -221,7 +217,7 @@
         </div>
       </form>
         
-    {% elif friend.friends_targetid == session.get('user') %}
+    {% elif friend.friends_targetid == ids %}
     <form method="post" action="{{ url_for('send_message',id=friend.friends_sourceid)}}">
       <div class="row">
         <div class="col">

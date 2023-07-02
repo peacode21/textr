@@ -47,12 +47,20 @@ div{
                     <div class="col p-1 border_container m-1">
                         {% if f.friends_sourceid == ids %}
                         <a href="{{ url_for('profile') }}" class="link">
-                            {% else %}
-                            {% if f.friends_targetid != ids %}
-                        <a href="{{ url_for('user_profile',id=f.friends_sourceid) }}" class="link">
+                            {% elif friendsrc != None %}
+                            {% if friendsrc[f.friends_sourceid].friends_targetid == ids %}
+                    <a href="{{ url_for('user_profile',id=f.friends_sourceid) }}" class="link">
+                        {% elif friendsrc[f.friends_sourceid].friends_sourceid == ids %}
+                    <a href="{{ url_for('user_profile',id=f.friends_sourceid) }}" class="link">
+                        {% elif friendtgt[f.friends_targetid].friends_targetid == ids %}
+                <a href="{{ url_for('user_profile',id=f.friends_sourceid) }}" class="link">
+                    {% elif friendtgt[f.friends_targetid].friends_sourceid == ids %}
+                <a href="{{ url_for('user_profile',id=f.friends_sourceid) }}" class="link">
                             {% else %}
                             <a href="{{ url_for('others_profile',id=f.friends_sourceid) }}" class="link">
                             {% endif %}
+                            {% else %}
+                            <a href="{{ url_for('others_profile',id=f.friends_sourceid) }}" class="link">
                             {% endif %}
 
                         {% if pics != None %}
@@ -70,12 +78,25 @@ div{
                     <div class="col">
                         <div class="row px-1">
                             <div class="col-12">
-                                {% if f.friends_sourceid == ids %}
+                            {% if f.friends_sourceid == ids %}
                                 <a href="{{ url_for('profile') }}" class="link">
                                     <button class="btn btn-primary form-control names">Visit Profile</button>
                                 </a>
-                                {% else %}
-                                    {% if f.friends_targetid != ids %}
+                                {% elif friendsrc != None %}
+                                    {% if friendsrc[f.friends_sourceid].friends_targetid == ids %}
+                                        <a href="{{ url_for('user_profile',id=f.friends_sourceid) }}" class="link">
+                                            <button class="btn btn-primary form-control names">View Profile</button>
+                                        </a>
+                                        {% elif friendsrc[f.friends_sourceid].friends_sourceid == ids %}
+                                        <a href="{{ url_for('user_profile',id=f.friends_sourceid) }}" class="link">
+                                            <button class="btn btn-primary form-control names">View Profile</button>
+                                        </a>
+                                                {% elif friendtgt != None %}
+                                        {% if friendtgt[f.friends_targetid].friends_targetid == ids %}
+                                        <a href="{{ url_for('user_profile',id=f.friends_sourceid) }}" class="link">
+                                            <button class="btn btn-primary form-control names">View Profile</button>
+                                        </a>
+                                        {% elif friendtgt[f.friends_targetid].friends_sourceid == ids %}
                                         <a href="{{ url_for('user_profile',id=f.friends_sourceid) }}" class="link">
                                             <button class="btn btn-primary form-control names">View Profile</button>
                                         </a>
@@ -83,8 +104,14 @@ div{
                                         <a href="{{ url_for('friend_request_send',id=f.source_friends.user_id) }}" class="link">
                                             <button class="btn btn-primary form-control names">Add Friend</button>
                                         </a>
-                                            {% endif %}
-                                {% endif %}
+                                        <span>{{f.target_friends.user_fname}}</span>
+                                        {% endif %}
+                                        {% endif %}
+                                    {% else %}
+                                    <a href="{{ url_for('friend_request_send',id=f.source_friends.user_id) }}" class="link">
+                                        <button class="btn btn-primary form-control names">Add Friend</button>
+                                    </a>
+                            {% endif %}
                             </div>
                         </div>
                     </div>
@@ -99,12 +126,14 @@ div{
                     <div class="col p-1 border_container m-1">
                         {% if f.friends_targetid == ids %}
                         <a href="{{ url_for('profile') }}" class="link">
-                            {% else %}
-                            {% if f.friends_targetid != [] %}
+                            {% elif friendtgt != None %}
+                                {% if friendtgt[f.friends_targetid].friends_sourceid == ids %}
                         <a href="{{ url_for('user_profile',id=f.friends_targetid) }}" class="link">
                             {% else %}
                             <a href="{{ url_for('others_profile',id=f.friends_targetid) }}" class="link">
                             {% endif %}
+                            {% else %}
+                            <a href="{{ url_for('others_profile',id=f.friends_targetid) }}" class="link">
                             {% endif %}
 
                         {% if pic != None %}
@@ -126,8 +155,8 @@ div{
                                 <a href="{{ url_for('profile') }}" class="link">
                                     <button class="btn btn-primary form-control names">Visit Profile</button>
                                 </a>
-                                {% else %}
-                                {% if f.friends_sourceid == ids %}
+                                {% elif friendtgt != None %}
+                                    {% if friendtgt[f.friends_targetid].friends_sourceid == ids %}
                                         <a href="{{ url_for('user_profile',id=f.friends_targetid) }}" class="link">
                                             <button class="btn btn-primary form-control names">View Profile</button>
                                         </a>
@@ -136,6 +165,10 @@ div{
                                         <button class="btn btn-primary form-control names">Add Friend</button>
                                         </a>
                                     {% endif %}
+                                    {% else %}
+                                        <a href="{{ url_for('friend_request_send',id=f.target_friends.user_id) }}" class="link">
+                                        <button class="btn btn-primary form-control names">Add Friend</button>
+                                        </a>
                                 {% endif %}
                             </div>
                         </div>

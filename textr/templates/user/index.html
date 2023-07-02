@@ -50,7 +50,7 @@
       color: rgb(255, 255, 255);
     }
     .navs{
-      height: 515px; 
+      height: 575px; 
       overflow-y: scroll;
     }
     .navs::-webkit-scrollbar {
@@ -346,7 +346,11 @@
     }
     .message_bg{
       background-color: rgb(0, 0, 0);
-      min-height: 500px;
+      min-height: 550px;
+    }
+    .chat_bg{
+      background-color: rgb(0, 0, 0);
+      height: 590px;
     }
     .chats {
       overflow-y: auto;
@@ -379,6 +383,10 @@
     }
     .friends_bg{
       background-color: #888;
+    }
+    .texts{
+      font-family:Arial, Helvetica, sans-serif;
+      font-size: small;
     }
   </style>
 
@@ -774,7 +782,7 @@
                                   <div class="col-12">
                                     <form class="form-group mb-4" method="post" action="{{ url_for('comment_post',id=p.post_id)}}">
                                     <div class="row">
-                                      <label class="mb-2 texts">Comment:</label>
+                                      <label class="mb-2">Comment:</label>
                                       <div class="col-1">
                                         {% if profile != None %}
 

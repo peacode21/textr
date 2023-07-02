@@ -264,7 +264,7 @@ def chats(id):
         one_message = Message.query.order_by(desc(Message.message_id)).filter(or_(Message.message_targetid==ids,Message.message_sourceid==ids)).first()
         profile = ProfilePicture.query.order_by(desc(ProfilePicture.profile_picture_id)).filter(ProfilePicture.profile_picture_userid==ids).first()
         picsrc = ProfilePicture.query.order_by(desc(ProfilePicture.profile_picture_id)).first()
-        return render_template('user/chats.html',friends=friends,message=message,profile=profile,picsrc=picsrc,friend=friend,one_message=one_message,user=user)
+        return render_template('user/chats.html',friends=friends,message=message,profile=profile,picsrc=picsrc,friend=friend,one_message=one_message,user=user,ids=ids)
     else:
         return redirect(url_for('form'))
 
@@ -443,16 +443,20 @@ def friends():
 @app.route('/textr/other_friends/<id>')
 def friends_friends(id):
     if session.get('user') != None:
-        ids = session['user']
+        ids = session.get('user')
         user = User.query.get(id)
         profile = ProfilePicture.query.order_by(desc(ProfilePicture.profile_picture_id)).filter(ProfilePicture.profile_picture_userid==ids).first()
         friends_friends = Friends.query.filter(or_(Friends.friends_targetid==id,Friends.friends_sourceid==id)).all()
         pics = {}
         pic = {}
+        friendsrc = {}
+        friendtgt = {}
         for f in friends_friends:
             pics[f.friends_sourceid] = ProfilePicture.query.order_by(desc(ProfilePicture.profile_picture_id)).filter(ProfilePicture.profile_picture_userid==f.friends_sourceid).first()
             pic[f.friends_targetid] = ProfilePicture.query.order_by(desc(ProfilePicture.profile_picture_id)).filter(ProfilePicture.profile_picture_userid==f.friends_targetid).first()
-        return render_template('user/friends_friends.html',friends_friends=friends_friends,profile=profile,pics=pics,pic=pic,id=id,ids=ids,user=user)
+            friendsrc[f.friends_sourceid] = Friends.query.filter(((Friends.friends_sourceid==f.friends_sourceid)&(Friends.friends_targetid==ids))).first()
+            friendtgt[f.friends_targetid] = Friends.query.filter(((Friends.friends_sourceid==ids)&(Friends.friends_targetid==f.friends_targetid))).first()
+        return render_template('user/friends_friends.html',friends_friends=friends_friends,profile=profile,pics=pics,pic=pic,id=id,ids=ids,user=user,friendsrc=friendsrc,friendtgt=friendtgt)
     else:
         return redirect(url_for('login_form'))
 
@@ -568,7 +572,7 @@ def profile():
         profile = ProfilePicture.query.order_by(desc(ProfilePicture.profile_picture_id)).filter(ProfilePicture.profile_picture_userid==id).first()
         compic = ProfilePicture.query.order_by(desc(ProfilePicture.profile_picture_id)).first()
         cover = CoverPhoto.query.order_by(desc(CoverPhoto.cover_photo_id)).filter(CoverPhoto.cover_photo_userid==id).first()
-        friends = Friends.query.filter(or_(Friends.friends_sourceid == id,Friends.friends_targetid == id))
+        friends = Friends.query.filter(or_(Friends.friends_sourceid == id,Friends.friends_targetid == id)).all()
         pics = {}
         pic = {}
         for f in friends:
@@ -599,7 +603,7 @@ def user_profile(id):
         user_profile = ProfilePicture.query.order_by(desc(ProfilePicture.profile_picture_id)).filter(ProfilePicture.profile_picture_userid==id).first()
         compic = ProfilePicture.query.order_by(desc(ProfilePicture.profile_picture_id)).first()
         cover = CoverPhoto.query.order_by(desc(CoverPhoto.cover_photo_id)).filter(CoverPhoto.cover_photo_userid==id).first()
-        friends = Friends.query.filter(or_(Friends.friends_sourceid == id,Friends.friends_targetid == id))
+        friends = Friends.query.filter(or_(Friends.friends_sourceid == id,Friends.friends_targetid == id)).all()
         pics = {}
         pic = {}
         for f in friends:
@@ -630,7 +634,7 @@ def others_profile(id):
         others_profile = ProfilePicture.query.order_by(desc(ProfilePicture.profile_picture_id)).filter(ProfilePicture.profile_picture_userid==id).first()
         compic = ProfilePicture.query.order_by(desc(ProfilePicture.profile_picture_id)).first()
         cover = CoverPhoto.query.order_by(desc(CoverPhoto.cover_photo_id)).filter(CoverPhoto.cover_photo_userid==id).first()
-        friends = Friends.query.filter(or_(Friends.friends_sourceid == id,Friends.friends_targetid == id))
+        friends = Friends.query.filter(or_(Friends.friends_sourceid == id,Friends.friends_targetid == id)).all()
         pics = {}
         pic = {}
         for f in friends:
